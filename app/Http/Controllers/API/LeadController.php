@@ -7,24 +7,40 @@ use Illuminate\Http\Request;
 
 class LeadController extends Controller
 {
-        public function index()
-{
-    return Lead::all();
-}
-   public function store(Request $request)
-{
-    $data = $request->all();
+    public function index()
+    {
+        return Lead::all();
+    }
+    public function store(Request $request)
+    {
+        $data = $request->all();
 
-  
-    if ($data['interes'] == 'casa') {
-        $data['estado'] = 'prioridad_alta';
-    } else {
-        $data['estado'] = 'nuevo';
+
+        if ($data['interes'] == 'casa') {
+            $data['estado'] = 'prioridad_alta';
+        } else {
+            $data['estado'] = 'nuevo';
+        }
+
+        $lead = Lead::create($data);
+
+        return response()->json($lead, 201);
+    }
+    public function update(Request $request, $id)
+    {
+        $lead = Lead::findOrFail($id);
+
+        $lead->update($request->all());
+
+        return response()->json($lead);
     }
 
-    $lead = Lead::create($data);
+    public function destroy($id)
+    {
+        $lead = Lead::findOrFail($id);
+        $lead->delete();
 
-    return response()->json($lead, 201);
-}
+        return response()->json(['message' => 'Lead eliminado']);
+    }
 
 }
