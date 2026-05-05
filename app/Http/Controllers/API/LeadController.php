@@ -42,5 +42,14 @@ class LeadController extends Controller
 
         return response()->json(['message' => 'Lead eliminado']);
     }
-
+    public function stats()
+    {
+        return response()->json([
+            'total' => Lead::count(),
+            'por_estado' => Lead::selectRaw('estado, COUNT(*) as total')
+                ->groupBy('estado')->get(),
+            'por_interes' => Lead::selectRaw('interes, COUNT(*) as total')
+                ->groupBy('interes')->get(),
+        ]);
+    }
 }
