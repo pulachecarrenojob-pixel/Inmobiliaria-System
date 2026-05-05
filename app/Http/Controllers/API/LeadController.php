@@ -11,10 +11,20 @@ class LeadController extends Controller
 {
     return Lead::all();
 }
-    public function store(Request $request)
-    {
-        $lead = Lead::create($request->all());
-        return response()->json($lead, 201);
+   public function store(Request $request)
+{
+    $data = $request->all();
+
+  
+    if ($data['interes'] == 'casa') {
+        $data['estado'] = 'prioridad_alta';
+    } else {
+        $data['estado'] = 'nuevo';
     }
+
+    $lead = Lead::create($data);
+
+    return response()->json($lead, 201);
+}
 
 }
